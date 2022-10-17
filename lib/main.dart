@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore_database/homepage.dart';
 import 'package:firestore_database/read_data.dart';
+import 'package:firestore_database/stream_data.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: ReadData(),
+      home: StreamData(),
     );
   }
 }
