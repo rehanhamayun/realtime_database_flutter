@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firestore_database/read_data.dart';
 import 'package:flutter/material.dart';
 
 class Homepage extends StatefulWidget {
@@ -88,6 +89,33 @@ class _HomepageState extends State<Homepage> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => ReadData()));
+            },
+            child: Container(
+              height: 50,
+              width: 150,
+              decoration: BoxDecoration(
+                color: Colors.purpleAccent,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: const Center(
+                child: Text(
+                  "Read Post Data",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
           ),

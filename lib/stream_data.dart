@@ -10,6 +10,7 @@ class StreamData extends StatefulWidget {
 
 class _StreamDataState extends State<StreamData> {
   final refDatabase = FirebaseDatabase.instance.ref('Post');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
