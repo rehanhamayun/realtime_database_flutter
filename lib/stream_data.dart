@@ -15,7 +15,7 @@ class _StreamDataState extends State<StreamData> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Stream Fec"),
+        title: Text("Stream Fetch"),
       ),
       body: Column(
         children: [

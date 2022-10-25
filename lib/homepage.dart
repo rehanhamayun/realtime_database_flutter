@@ -65,9 +65,11 @@ class _HomepageState extends State<Homepage> {
           InkWell(
             onTap: () {
               _startLoading();
-              dbRefdatabase
-                  .child('1')
-                  .set({'title': postController.text.toString()});
+              String id = DateTime.now().microsecondsSinceEpoch.toString();
+              dbRefdatabase.child(id).set({
+                'title': postController.text.toString(),
+                'id': id,
+              });
             },
             child: Container(
               height: 50,

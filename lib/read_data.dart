@@ -13,6 +13,7 @@ class _ReadDataState extends State<ReadData> {
   @override
   final readDatabase = FirebaseDatabase.instance.ref('Post');
   final searchFilter = TextEditingController();
+  final editController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -30,7 +31,7 @@ class _ReadDataState extends State<ReadData> {
             child: TextFormField(
               controller: searchFilter,
               decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(
                     width: 1,
                     color: Colors.deepPurpleAccent,
@@ -56,17 +57,49 @@ class _ReadDataState extends State<ReadData> {
             child: FirebaseAnimatedList(
               query: readDatabase,
               itemBuilder: (context, snapshot, animation, index) {
-                final title = snapshot.child('1').value.toString();
+                final title = snapshot.child('title').value.toString();
+                //final id = snapshot.child("id").value.toString();
 
                 if (searchFilter.text.isEmpty) {
                   return ListTile(
-                    title: Text(snapshot.child('1').value.toString()),
+                    title: Text(title),
+                    subtitle: Text(snapshot.child("id").value.toString()),
+                    trailing: PopupMenuButton(
+                      icon: const Icon(Icons.more_vert),
+                      itemBuilder: (BuildContext context) => [
+                        PopupMenuItem(
+                          value: 1,
+                          child: ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: const Text("Edit"),
+                            onTap: () {
+                              Navigator.pop(context);
+                              showMyDialog(
+                                  title, snapshot.child("id").value.toString());
+                            },
+                          ),
+                        ),
+                        // 2
+                        PopupMenuItem(
+                          value: 2,
+                          child: ListTile(
+                            leading: Icon(Icons.delete),
+                            title: Text("Delete"),
+                          ),
+                          onTap: () {
+                            readDatabase
+                                .child(snapshot.child('id').value.toString())
+                                .remove();
+                          },
+                        ),
+                      ],
+                    ),
                   );
                 } else if (title
                     .toLowerCase()
                     .contains(searchFilter.text.toLowerCase())) {
                   return ListTile(
-                    title: Text(snapshot.child('1').value.toString()),
+                    title: Text(snapshot.child('title').value.toString()),
                   );
                 } else {
                   return Container();
@@ -77,5 +110,57 @@ class _ReadDataState extends State<ReadData> {
         ],
       ),
     );
+  }
+
+  Future<void> showMyDialog(String title, String id) async {
+    editController.text = title;
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Update"),
+            content: Container(
+              child: TextField(
+                controller: editController,
+                decoration: const InputDecoration(
+                  hintText: "Edit",
+                ),
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      readDatabase
+                          .child(id)
+                          .update({'title': editController.text.toLowerCase()});
+                    },
+                    child: const Text(
+                      "Update",
+                      style: TextStyle(
+                        color: Colors.deepPurpleAccent,
+                      ),
+                    ),
+                  ),
+                  //
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: Colors.deepPurpleAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
   }
 }
